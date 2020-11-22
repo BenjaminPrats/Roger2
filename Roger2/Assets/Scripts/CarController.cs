@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
+    public float _boostLevelStart = 1.0f;
+
     public Rigidbody _rb;
     public Transform _cameraTarget;
     public Transform _rayGroundCheckPoint;
@@ -28,7 +30,9 @@ public class CarController : MonoBehaviour
     public float _boostCameraDelay = 5.0f;
 
     [Space(10)]
-    public float _rotationStrength = 5.0f;
+    public float _rotationStrengthMin = 100.0f;
+    public float _rotationStrengthMax = 150.0f;
+    public float _rotationSmoothTime = 0.1f;
     public float _cameraRotationRadius = 10.0f;
     public float _cameraSmoothTime = 0.3f;
 
@@ -60,11 +64,14 @@ public class CarController : MonoBehaviour
     private Vector3 _cameraFollowVelocity = Vector3.zero;
 
     private Quaternion _futureRotation;
+    private float _rotationStrength;
+    private float _rotationSmoothVelocity = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
         _rb.transform.parent = null;
+        _boostLevel = _boostLevelStart;
     }
 
     // Update is called once per frame
@@ -76,6 +83,12 @@ public class CarController : MonoBehaviour
 
         _accelerationInput = _verticalInput > 0.0f ? _verticalInput * _forwardAcceleration :
                              _verticalInput < 0.0f ? _verticalInput * _reverseAcceleration : 0.0f;
+
+        // Smooth acceleration of rotation
+        if (_rotationInput == 0.0f)
+            _rotationStrength = _rotationStrengthMin;
+        else
+            _rotationStrength = Mathf.SmoothDamp(_rotationStrength, _rotationStrengthMax, ref _rotationSmoothVelocity, _rotationSmoothTime);
 
         _boostBar.SetSlider(_boostLevel);
         _isBoostActivated = (Input.GetButton("Jump") && _boostLevel > 0.0f) ? true : false;
@@ -99,6 +112,11 @@ public class CarController : MonoBehaviour
         }
 
         transform.position = _rb.transform.position;
+    }
+
+    public bool IsBoostActivated()
+    {
+        return _isBoostActivated;
     }
 
     private void FixedUpdate()
