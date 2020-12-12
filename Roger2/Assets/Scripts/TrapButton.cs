@@ -7,9 +7,15 @@ public class TrapButton : MonoBehaviour
     public MovingTraps[] traps;
     public float _duration = 5.0f;
     public float _yTrigger = 0.2f;
+    public bool _whenTriggerGoDown = true;
 
     bool _timerActive = false;
     float _timeRemaining;
+
+    private void Start()
+    {
+        ResetTraps();
+    }
 
     // Update is called once per frame
     void Update()
@@ -19,10 +25,7 @@ public class TrapButton : MonoBehaviour
             _timeRemaining -= Time.deltaTime;
             if (_timeRemaining < 0.0f)
             {
-                for (int i = 0; i < traps.Length; i++)
-                {
-                    traps[i].GoUp();
-                }
+                ResetTraps();
                 transform.position = transform.position + _yTrigger * Vector3.up;
                 _timerActive = false;
             }
@@ -35,12 +38,7 @@ public class TrapButton : MonoBehaviour
         if (carController)
         {
             _timerActive = false;
-
-            for (int i = 0; i < traps.Length; i++)
-            {
-                traps[i].GoDown();
-            }
-
+            TriggerTraps();
             transform.position = transform.position - _yTrigger * Vector3.up;
         }
     }
@@ -52,6 +50,27 @@ public class TrapButton : MonoBehaviour
         {
             _timerActive = true;
             _timeRemaining = _duration;
+        }
+    }
+
+    private void ResetTraps()
+    {
+        MoveTraps(!_whenTriggerGoDown);
+    }
+
+    private void TriggerTraps()
+    {
+        MoveTraps(_whenTriggerGoDown);
+    }
+
+    private void MoveTraps(bool down)
+    {
+        for (int i = 0; i < traps.Length; i++)
+        {
+            if (down)
+                traps[i].GoDown();
+            else
+                traps[i].GoUp();
         }
     }
 }

@@ -41,7 +41,7 @@ public class MovingTraps : MonoBehaviour
     {
         if (_isUp)
             return;
-
+        Debug.Log("Go Up!");
         _isUp = true;
         _isMoving = true;
         _targetPosition = _startingPosition;
@@ -51,7 +51,7 @@ public class MovingTraps : MonoBehaviour
     {
         if (!_isUp)
             return;
-
+        Debug.Log("Go Down!");
         _isUp = false;
         _isMoving = true;
         _targetPosition = _startingPosition - _yTranslation;
