@@ -21,10 +21,10 @@ public class CatchItem : MonoBehaviour
 
     public AudioSource _sound;
 
-    //private void Start()
-    //{
-    //    _sound = GetComponent<AudioSource>();
-    //}
+    private void Start()
+    {
+        _sound.transform.parent = null;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -33,7 +33,6 @@ public class CatchItem : MonoBehaviour
         {
             _sound.transform.parent = null;
             _sound.Play();
-            Destroy(_sound.gameObject, _sound.clip.length);
 
             carController._scoreManager.AddItem(itemType);
 

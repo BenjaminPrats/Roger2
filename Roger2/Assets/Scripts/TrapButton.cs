@@ -17,7 +17,7 @@ public class TrapButton : MonoBehaviour
 
     private void Start()
     {
-        ResetTraps();
+        ResetTraps(false);
     }
 
     // Update is called once per frame
@@ -57,9 +57,9 @@ public class TrapButton : MonoBehaviour
         }
     }
 
-    private void ResetTraps()
+    private void ResetTraps(bool playSound = true)
     {
-        MoveTraps(!_whenTriggerGoDown);
+        MoveTraps(!_whenTriggerGoDown, playSound);
     }
 
     private void TriggerTraps()
@@ -67,9 +67,10 @@ public class TrapButton : MonoBehaviour
         MoveTraps(_whenTriggerGoDown);
     }
 
-    private void MoveTraps(bool down)
+    private void MoveTraps(bool down, bool playSound = true)
     {
-        _soundTrap.Play();
+        if (playSound)
+            _soundTrap.Play();
         for (int i = 0; i < traps.Length; i++)
         {
             if (down)
