@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TrapButton : MonoBehaviour
 {
+    public AudioSource _soundButton;
+    public AudioSource _soundTrap;
+
     public MovingTraps[] traps;
     public float _duration = 5.0f;
     public float _yTrigger = 0.2f;
@@ -34,6 +37,7 @@ public class TrapButton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        _soundButton.Play();
         CarController carController = other.gameObject.transform.parent.gameObject.GetComponent<CarController>();
         if (carController)
         {
@@ -65,6 +69,7 @@ public class TrapButton : MonoBehaviour
 
     private void MoveTraps(bool down)
     {
+        _soundTrap.Play();
         for (int i = 0; i < traps.Length; i++)
         {
             if (down)
